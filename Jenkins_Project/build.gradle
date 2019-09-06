@@ -12,11 +12,16 @@ plugins {
 }
 
 task fatJar(type:Jar){
-    maifest 'Implementation-Title ': 'Gradle jar  File Example',
+    maifest{
+    'Implementation-Title ': 'Gradle jar  File Example',
     'Implementation-Version: versions'
-    'Main-Class': 
+    'Main-Class': 'Jenkins_Project.Jenkins_Project'
+
 }
-baseName = 
+baseName = project.name + '-all'
+from{ configrations.complie.collect{ it.isDirectory()?it:zipTree()}}
+with jar
+}
 
 repositories {
     // Use jcenter for resolving your dependencies.
