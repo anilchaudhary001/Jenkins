@@ -10,23 +10,28 @@ plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
 }
-
-task fatJar(type:Jar){
-    maifest{
-    'Implementation-Title ': 'Gradle jar  File Example',
-    'Implementation-Version: versions'
-    'Main-Class': 'Jenkins_Project.Jenkins_Project'
-
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
 }
-baseName = project.name + '-all'
-from{ configrations.complie.collect{ it.isDirectory()?it:zipTree()}}
-with jar
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                 'Implementation-Version': '1.0',
+                 'Main-Class': 'Jenkins_Project.Jenkins_Project'
+    }
+    archiveBaseName = project.name + '-all'
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
 }
 
 repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+    // Use Maven Central for resolving your dependencies.
+    mavenCentral()
 }
 
 dependencies {
